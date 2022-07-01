@@ -232,7 +232,7 @@ func (r *JobReconciler) ReconcileJob(
 			return err
 		}
 	}
-
+	fmt.Println("len of replicas",len(replicas))
 	for rtype, spec := range replicas {
 		core.InitializeReplicaStatuses(status, rtype)
 

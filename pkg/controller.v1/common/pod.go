@@ -311,6 +311,7 @@ func (jc *JobController) ReconcilePods(
 	//
 	// If replica is 1, return a slice with size 3. [[0],[1],[2]], pod with replica-index 1 and 2 are out of range and will be deleted.
 	podSlices := jc.GetPodSlices(pods, numReplicas, logger)
+	fmt.Println("len of podSlices", len(podSlices))
 	for index, podSlice := range podSlices {
 		if len(podSlice) > 1 {
 			logger.Warningf("We have too many pods for %s %d", rt, index)
@@ -371,7 +372,7 @@ func (jc *JobController) ReconcilePods(
 // createNewPod creates a new pod for the given index and type.
 func (jc *JobController) createNewPod(job interface{}, rt string, index int, spec *apiv1.ReplicaSpec, masterRole bool,
 	replicas map[apiv1.ReplicaType]*apiv1.ReplicaSpec) error {
-
+	fmt.Println("create new pod",rt,index)
 	metaObject, ok := job.(metav1.Object)
 	if !ok {
 		return fmt.Errorf("job is not a metav1.Object type")
