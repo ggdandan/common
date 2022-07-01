@@ -281,7 +281,6 @@ func (jc *JobController) ReconcilePods(
 	if !ok {
 		return fmt.Errorf("job is not a metav1.Object type")
 	}
-	fmt.Println("reconcile job for ",metav1.Object.GetName())
 	runtimeObject, ok := job.(runtime.Object)
 	if !ok {
 		return fmt.Errorf("job is not a runtime.Object type")
