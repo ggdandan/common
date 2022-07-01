@@ -281,6 +281,7 @@ func (jc *JobController) ReconcilePods(
 	if !ok {
 		return fmt.Errorf("job is not a metav1.Object type")
 	}
+	fmt.Println("reconcile job for ",metav1.Object.GetName())
 	runtimeObject, ok := job.(runtime.Object)
 	if !ok {
 		return fmt.Errorf("job is not a runtime.Object type")
@@ -313,6 +314,7 @@ func (jc *JobController) ReconcilePods(
 	podSlices := jc.GetPodSlices(pods, numReplicas, logger)
 	fmt.Println("len of podSlices", len(podSlices))
 	for index, podSlice := range podSlices {
+		fmt.Println("-------debug iterate pod", podSlice.ObjectMeta.Name)
 		if len(podSlice) > 1 {
 			logger.Warningf("We have too many pods for %s %d", rt, index)
 		} else if len(podSlice) == 0 {
