@@ -313,7 +313,6 @@ func (jc *JobController) ReconcilePods(
 	podSlices := jc.GetPodSlices(pods, numReplicas, logger)
 	fmt.Println("len of podSlices", len(podSlices))
 	for index, podSlice := range podSlices {
-		fmt.Println("-------debug iterate pod", podSlice.ObjectMeta.Name)
 		if len(podSlice) > 1 {
 			logger.Warningf("We have too many pods for %s %d", rt, index)
 		} else if len(podSlice) == 0 {
@@ -328,7 +327,7 @@ func (jc *JobController) ReconcilePods(
 		} else {
 			// Check the status of the current pod.
 			pod := podSlice[0]
-
+			fmt.Println("pod name is", pod.ObjectMeta.Name)
 			// check if the index is in the valid range, if not, we should kill the pod
 			if index < 0 || index >= numReplicas {
 				err = jc.PodControl.DeletePod(pod.Namespace, pod.Name, runtimeObject)
