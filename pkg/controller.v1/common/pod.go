@@ -433,6 +433,7 @@ func (jc *JobController) createNewPod(job interface{}, rt string, index int, spe
 			logger.Warning(errMsg)
 			jc.Recorder.Event(runtimeObject, v1.EventTypeWarning, podTemplateSchedulerNameReason, errMsg)
 		} else {
+			fmt.Println("debug gangSchedulerName",gangSchedulerName)
 			podTemplate.Spec.SchedulerName = gangSchedulerName
 		}
 
@@ -451,6 +452,7 @@ func (jc *JobController) createNewPod(job interface{}, rt string, index int, spe
 	jc.Expectations.RaiseExpectations(expectationPodsKey, 1, 0)
 
 	controllerRef := jc.GenOwnerReference(metaObject)
+	fmt.Println("before CreatePodsWithControllerRef")
 	err = jc.PodControl.CreatePodsWithControllerRef(metaObject.GetNamespace(), podTemplate, runtimeObject, controllerRef)
 	if err != nil && errors.IsTimeout(err) {
 		// Pod is created but its initialization has timed out.
@@ -460,11 +462,13 @@ func (jc *JobController) createNewPod(job interface{}, rt string, index int, spe
 		// uninitialized for a long time, the informer will not
 		// receive any update, and the controller will create a new
 		// pod when the expectation expires.
+		fmt.Println("debug create 1 failed ", err)
 		return nil
 	} else if err != nil {
 		// Since error occurred(the informer won't observe this pod),
 		// we decrement the expected number of creates
 		// and wait until next reconciliation
+		fmt.Println("debug create 2 failed", err)
 		jc.Expectations.CreationObserved(expectationPodsKey)
 		return err
 	}
