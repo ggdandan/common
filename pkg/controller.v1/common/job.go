@@ -237,6 +237,7 @@ func (jc *JobController) ReconcileJobs(
 
 			if minResources == nil {
 				minResources = jc.calcPGMinResources(minMember, replicas)
+				fmt.Println("we got it")
 			}
 
 			pgSpec := v1beta1.PodGroupSpec{
@@ -267,7 +268,7 @@ func (jc *JobController) ReconcileJobs(
 				return jc.Controller.UpdateJobStatusInApiServer(job, &jobStatus)
 			}
 		}
-
+		fmt.Println("len of job replicas", len(replicas))
 		// Diff current active pods/services with replicas.
 		for rtype, spec := range replicas {
 			err := jc.Controller.ReconcilePods(metaObject, &jobStatus, pods, rtype, spec, replicas)
