@@ -253,6 +253,7 @@ func (jc *JobController) ReconcileJobs(
 				log.Warnf("Sync PodGroup %v: %v", jobKey, err)
 				syncReplicas = false
 			}
+			fmt.Println("after sync pod group", pg.Status.Phase)
 
 			// Delay pods creation until podgroup status is inqueue
 			if pg == nil || pg.Status.Phase == "" || pg.Status.Phase == v1beta1.PodGroupPending {
