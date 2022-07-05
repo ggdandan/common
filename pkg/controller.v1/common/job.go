@@ -247,27 +247,27 @@ func (jc *JobController) ReconcileJobs(
 				MinResources:      minResources,
 			}
 
-			syncReplicas := true
-			pg, err := jc.SyncPodGroup(metaObject, pgSpec)
+			//syncReplicas := true
+			_, err := jc.SyncPodGroup(metaObject, pgSpec)
 			if err != nil {
 				log.Warnf("Sync PodGroup %v: %v", jobKey, err)
-				syncReplicas = false
+				//syncReplicas = false
 			}
-			fmt.Println("after sync pod group", pg.Status.Phase)
+			
 
-			// Delay pods creation until podgroup status is inqueue
-			if pg == nil || pg.Status.Phase == "" || pg.Status.Phase == v1beta1.PodGroupPending {
-				log.Warnf("PodGroup %v unschedulable", jobKey)
-				syncReplicas = false
-			}
+			// // Delay pods creation until podgroup status is inqueue
+			// if pg == nil || pg.Status.Phase == "" || pg.Status.Phase == v1beta1.PodGroupPending {
+			// 	log.Warnf("PodGroup %v unschedulable", jobKey)
+			// 	syncReplicas = false
+			// }
 
-			if !syncReplicas {
-				now := metav1.Now()
-				jobStatus.LastReconcileTime = &now
+			// if !syncReplicas {
+			// 	now := metav1.Now()
+			// 	jobStatus.LastReconcileTime = &now
 
-				// Update job status here to trigger a new reconciliation
-				return jc.Controller.UpdateJobStatusInApiServer(job, &jobStatus)
-			}
+			// 	// Update job status here to trigger a new reconciliation
+			// 	return jc.Controller.UpdateJobStatusInApiServer(job, &jobStatus)
+			// }
 		}
 		fmt.Println("len of job replicas", len(replicas))
 		// Diff current active pods/services with replicas.
